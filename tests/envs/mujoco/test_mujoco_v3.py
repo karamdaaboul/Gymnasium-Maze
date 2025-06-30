@@ -2,9 +2,9 @@ import gymnasium as gym
 import numpy as np
 import pytest
 
-import gymnasium_robotics
+import gymnasium_maze
 
-gym.register_envs(gymnasium_robotics)
+gym.register_envs(gymnasium_maze)
 
 EPS = 1e-6
 

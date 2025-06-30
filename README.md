@@ -1,47 +1,47 @@
-[![Python](https://img.shields.io/pypi/pyversions/gymnasium-robotics.svg)](https://badge.fury.io/py/gymnasium-robotics)
-[![PyPI](https://badge.fury.io/py/gymnasium-robotics.svg)](https://badge.fury.io/py/gymnasium-robotics)
+[![Python](https://img.shields.io/pypi/pyversions/gymnasium-maze.svg)](https://badge.fury.io/py/gymnasium-maze)
+[![PyPI](https://badge.fury.io/py/gymnasium-maze.svg)](https://badge.fury.io/py/gymnasium-maze)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-
 <p align="center">
-  <a href = "https://robotics.farama.org/" target = "_blank"> <img src="https://raw.githubusercontent.com/Farama-Foundation/Gymnasium-Robotics/main/docs/gymnasium-robotics.png" width="500px"/> </a>
+  <a href = "https://robotics.farama.org/" target = "_blank"> <img src="https://raw.githubusercontent.com/Farama-Foundation/Gymnasium-Robotics/main/docs/gymnasium-maze.png" width="500px"/> </a>
 </p>
 
-This library contains a collection of Reinforcement Learning robotic environments that use the [Gymnasium](https://gymnasium.farama.org/) API. The environments run with the [MuJoCo](https://mujoco.org/) physics engine and the maintained [mujoco python bindings](https://mujoco.readthedocs.io/en/latest/python.html).
-
-The documentation website is at [robotics.farama.org](https://robotics.farama.org/), and we have a public discord server (which we also use to coordinate development work) that you can join here: [https://discord.gg/YymmHrvS](https://discord.gg/YymmHrvS)
+This library contains a collection of Reinforcement Learning maze environments that use the [Gymnasium](https://gymnasium.farama.org/) API. The environments run with the [MuJoCo](https://mujoco.org/) physics engine and the maintained [mujoco python bindings](https://mujoco.readthedocs.io/en/latest/python.html).
 
 ## Installation
 
-To install the Gymnasium-Robotics environments use `pip install gymnasium-robotics`
-
-These environments also require the MuJoCo engine from Deepmind to be installed. Instructions to install the physics engine can be found at the [MuJoCo website](https://mujoco.org/) and the [MuJoCo Github repository](https://github.com/deepmind/mujoco).
-
-Note that the latest environment versions use the latest mujoco python bindings maintained by the MuJoCo team. If you wish to use the old versions of the environments that depend on [mujoco-py](https://github.com/openai/mujoco-py), please install this library with `pip install gymnasium-robotics[mujoco-py]`
+These environments require the MuJoCo engine from Deepmind to be installed. Instructions to install the physics engine can be found at the [MuJoCo website](https://mujoco.org/) and the [MuJoCo Github repository](https://github.com/deepmind/mujoco).
 
 We support and test for Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
 ## Environments
 
-`Gymnasium-Robotics` includes the following groups of environments:
+`Gymnasium-Maze` includes maze environments where an agent has to navigate through a maze to reach certain goal position. Two different agents can be used: a 2-DoF force-controlled ball, or the classic `Ant` agent from the [Gymnasium MuJoCo environments](https://gymnasium.farama.org/environments/mujoco/ant/). The environment can be initialized with a variety of maze shapes with increasing levels of difficulty.
 
-* [Fetch](https://robotics.farama.org/envs/fetch/) - A collection of environments with a 7-DoF robot arm that has to perform manipulation tasks such as Reach, Push, Slide or Pick and Place.
-* [Shadow Dexterous Hand](https://robotics.farama.org/envs/shadow_dexterous_hand/) - A collection of environments with a 24-DoF anthropomorphic robotic hand that has to perform object manipulation tasks with a cube, egg-object, or pen. There are variations of these environments that also include data from 92 touch sensors in the observation space.
-* [MaMuJoCo](https://robotics.farama.org/envs/MaMuJoCo/) - A collection of multi agent factorizations of the [Gymnasium/MuJoCo](https://gymnasium.farama.org/environments/mujoco/) environments and a framework for factorizing robotic environments, uses the [pettingzoo.ParallelEnv](https://pettingzoo.farama.org/api/parallel/) API.
+### Available Maze Types
 
-The [D4RL](https://github.com/Farama-Foundation/D4RL) environments are now available. These environments have been refactored and may not have the same action/observation spaces as the original, please read their documentation:
+* **UMaze** - Simple U-shaped maze
+* **Open** - Open area with walls around the perimeter
+* **Medium** - Medium complexity maze
+* **Large** - Large, complex maze
+* **Dangerous** - maze with dangerous states
 
-* [Maze Environments](https://robotics.farama.org/envs/maze/) - An agent has to navigate through a maze to reach certain goal position. Two different agents can be used: a 2-DoF force-controlled ball, or the classic `Ant` agent from the [Gymnasium MuJoCo environments](https://gymnasium.farama.org/environments/mujoco/ant/). The environment can be initialized with a variety of maze shapes with increasing levels of difficulty.
-* [Adroit Arm](https://robotics.farama.org/envs/adroit_hand/) - A collection of environments that use the Shadow Dexterous Hand with additional degrees of freedom for the arm movement.
-The different tasks involve hammering a nail, opening a door, twirling a pen, or picking up and moving a ball.
-* [Franka Kitchen](https://robotics.farama.org/envs/franka_kitchen/) - Multitask environment in which a 9-DoF Franka robot is placed in a kitchen containing several common household items. The goal of each task is to interact with the items in order to reach a desired goal configuration.
+### Agent Types
 
-**WIP**: generate new `D4RL` environment datasets with [Minari](https://github.com/Farama-Foundation/Minari).
+* **Point** - A 2-DoF force-controlled ball that can move in x and y directions
+* **Ant** - The classic Ant agent with 8 degrees of freedom
+
+### Environment Variations
+
+Each maze type comes in different variations:
+* **Standard** - Single goal and reset location
+* **Diverse_G** - Multiple possible goal locations
+* **Diverse_GR** - Multiple possible goal and reset locations
 
 ## Multi-goal API
 
-The robotic environments use an extension of the core Gymnasium API by inheriting from [GoalEnv](https://robotics.farama.org/content/multi-goal_api/) class. The new API forces the environments to have a dictionary observation space that contains 3 keys:
+The maze environments use an extension of the core Gymnasium API by inheriting from [GoalEnv](https://robotics.farama.org/content/multi-goal_api/) class. The new API forces the environments to have a dictionary observation space that contains 3 keys:
 
 * `observation` - The actual observation of the environment
 * `desired_goal` - The goal that the agent has to achieved
@@ -57,7 +57,7 @@ goal, e.g. state derived from the simulation.
 ```python
 import gymnasium as gym
 
-env = gym.make("FetchReach-v3")
+env = gym.make("PointMaze_UMaze-v3")
 env.reset()
 obs, reward, terminated, truncated, info = env.step(env.action_space.sample())
 
@@ -78,17 +78,4 @@ The `GoalEnv` class can also be used for custom environments.
 ## Project Maintainers
 Main Contributors: [Rodrigo Perez-Vicente](https://github.com/rodrigodelazcano), [Kallinteris Andreas](https://github.com/Kallinteris-Andreas), [Jet Tai](https://github.com/jjshoots)
 
-Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
-
-## Citation
-
-If you use this in your research, please cite:
-```
-@software{gymnasium_robotics2023github,
-  author = {Rodrigo de Lazcano and Kallinteris Andreas and Jun Jet Tai and Seungjae Ryan Lee and Jordan Terry},
-  title = {Gymnasium Robotics},
-  url = {http://github.com/Farama-Foundation/Gymnasium-Robotics},
-  version = {1.4.0},
-  year = {2024},
-}
-```
+Modified by: [Karam Daaboul](https://github.com/karamdaaboul)

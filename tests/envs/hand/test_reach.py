@@ -2,9 +2,9 @@ import pickle
 
 import gymnasium as gym
 
-import gymnasium_robotics
+import gymnasium_maze
 
-gym.register_envs(gymnasium_robotics)
+gym.register_envs(gymnasium_maze)
 
 
 def test_serialize_deserialize():

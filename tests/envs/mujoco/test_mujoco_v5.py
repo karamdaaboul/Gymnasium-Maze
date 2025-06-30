@@ -3,10 +3,10 @@ import numpy as np
 import pytest
 from gymnasium.envs.mujoco.mujoco_env import MujocoEnv
 
-import gymnasium_robotics
-from gymnasium_robotics.envs.mujoco.mujoco_py_env import BaseMujocoPyEnv
+import gymnasium_maze
+from gymnasium_maze.envs.mujoco.mujoco_py_env import BaseMujocoPyEnv
 
-gym.register_envs(gymnasium_robotics)
+gym.register_envs(gymnasium_maze)
 
 ALL_MUJOCO_ENVS = [
     "Ant",

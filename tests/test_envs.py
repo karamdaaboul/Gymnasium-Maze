@@ -9,10 +9,10 @@ from gymnasium.envs.registration import EnvSpec
 from gymnasium.error import Error
 from gymnasium.utils.env_checker import check_env, data_equivalence
 
-import gymnasium_robotics
+import gymnasium_maze
 from tests.utils import all_testing_env_specs, assert_equals
 
-gym.register_envs(gymnasium_robotics)
+gym.register_envs(gymnasium_maze)
 
 CHECK_ENV_IGNORE_WARNINGS = [
     f"\x1b[33mWARN: {message}\x1b[0m"
@@ -31,7 +31,7 @@ non_mujoco_py_env_specs = [
     for spec in all_testing_env_specs
     if "MujocoPy" not in spec.entry_point
     and not spec.entry_point.startswith(
-        "gymnasium_robotics.envs.mujoco."
+        "gymnasium_maze.envs.mujoco."
     )  # Exclude version 2 and version 3 of the "mujoco" environments
 ]
 

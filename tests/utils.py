@@ -6,7 +6,7 @@ import numpy as np
 all_testing_env_specs = []
 for env_spec in gym.registry.values():
     if isinstance(env_spec.entry_point, str):
-        if env_spec.entry_point.startswith("gymnasium_robotics.envs"):
+        if env_spec.entry_point.startswith("gymnasium_maze.envs"):
             all_testing_env_specs.append(env_spec)
 
 
