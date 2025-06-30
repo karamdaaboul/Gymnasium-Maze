@@ -18,7 +18,7 @@ from typing import Dict, List, Optional, Union
 import numpy as np
 
 from gymnasium_maze.core import GoalEnv
-from gymnasium_maze.envs.maze.maps import COMBINED, DANGER, GOAL, RESET, U_MAZE
+from gymnasium_maze.envs.locomaze.maps import COMBINED, DANGER, GOAL, RESET, U_MAZE
 
 
 class Maze:

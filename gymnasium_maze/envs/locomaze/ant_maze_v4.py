@@ -1,3 +1,16 @@
+"""A maze environment with the Gymnasium Ant agent (https://github.com/Farama-Foundation/Gymnasium/blob/main/gymnasium/envs/mujoco/ant_v4.py).
+
+The code is inspired by the D4RL repository hosted on GitHub (https://github.com/Farama-Foundation/D4RL), published in the paper
+'D4RL: Datasets for Deep Data-Driven Reinforcement Learning' by Justin Fu, Aviral Kumar, Ofir Nachum, George Tucker, Sergey Levine.
+
+Original Author of the code: Justin Fu
+
+The modifications made involve reusing the code in Gymnasium for the Ant environment and in `point_maze/maze_env.py`.
+The new code also follows the Gymnasium API and Multi-goal API
+
+This project is covered by the Apache 2.0 License.
+"""
+
 import sys
 from os import path
 from typing import Dict, List, Optional, Union
@@ -7,8 +20,8 @@ from gymnasium import spaces
 from gymnasium.envs.mujoco.ant_v4 import AntEnv
 from gymnasium.utils.ezpickle import EzPickle
 
-from gymnasium_maze.envs.maze.maps import U_MAZE
-from gymnasium_maze.envs.maze.maze import MazeEnv
+from gymnasium_maze.envs.locomaze.maps import U_MAZE
+from gymnasium_maze.envs.locomaze.maze_v4 import MazeEnv
 from gymnasium_maze.utils.mujoco_utils import MujocoModelNames
 
 
@@ -28,6 +41,7 @@ class AntMazeEnv(MazeEnv, EzPickle):
         maze_map: List[List[Union[str, int]]] = U_MAZE,
         reward_type: str = "sparse",
         continuing_task: bool = True,
+        reset_target: bool = False,
         **kwargs,
     ):
         # Get the ant.xml path from the Gymnasium package
@@ -41,6 +55,7 @@ class AntMazeEnv(MazeEnv, EzPickle):
             maze_height=0.5,
             reward_type=reward_type,
             continuing_task=continuing_task,
+            reset_target=reset_target,
             **kwargs,
         )
         # Create the MuJoCo environment, include position observation of the Ant for GoalEnv
@@ -67,13 +82,13 @@ class AntMazeEnv(MazeEnv, EzPickle):
         )
 
         self.render_mode = render_mode
-
         EzPickle.__init__(
             self,
             render_mode,
             maze_map,
             reward_type,
             continuing_task,
+            reset_target,
             **kwargs,
         )
 
@@ -84,6 +99,9 @@ class AntMazeEnv(MazeEnv, EzPickle):
 
         obs, info = self.ant_env.reset(seed=seed)
         obs_dict = self._get_obs(obs)
+        info["success"] = bool(
+            np.linalg.norm(obs_dict["achieved_goal"] - self.goal) <= 0.45
+        )
 
         return obs_dict, info
 
@@ -91,13 +109,16 @@ class AntMazeEnv(MazeEnv, EzPickle):
         ant_obs, _, _, _, info = self.ant_env.step(action)
         obs = self._get_obs(ant_obs)
 
+        reward = self.compute_reward(obs["achieved_goal"], self.goal, info)
         terminated = self.compute_terminated(obs["achieved_goal"], self.goal, info)
         truncated = self.compute_truncated(obs["achieved_goal"], self.goal, info)
-
-        reward = self.compute_reward(obs["achieved_goal"], self.goal, info)
+        info["success"] = bool(np.linalg.norm(obs["achieved_goal"] - self.goal) <= 0.45)
 
         if self.render_mode == "human":
             self.render()
+
+        # Update the goal position if necessary
+        self.update_goal(obs["achieved_goal"])
 
         return obs, reward, terminated, truncated, info
 

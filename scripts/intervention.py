@@ -19,15 +19,15 @@ def main():
     try:
         # --- 3. Setup the Teleoperation Interface ---
         # Initialize the class imported from the library
-        teleop_agent = TeleopGamepadPoint2D(deadzone=0.2)
+        teleop_agent = TeleopGamepadPoint2D(deadzone=0.1)
 
         # --- 4. Wrap the Environment ---
         # The wrapper takes the base environment and the teleop interface.
         env = HumanInterventionWrapper(
             env,
             teleop_agent,
-            threshold=0.1,  # Start override if joystick moves > 10%
-            hold_time=0.5   # Stay in override mode for 0.5s after last input
+            threshold=0.2,  # Start override if joystick moves > 10%
+            hold_time=0.1   # Stay in override mode for 0.5s after last input
         )
 
         # --- 5. Main Loop ---
@@ -38,7 +38,6 @@ def main():
             # This simulates a simple, autonomous policy (e.g., your RL agent's output)
             # Here, it's just a random action.
             random_policy_action = env.action_space.sample()
-            
             # The step function now takes the policy's action as an argument.
             # The wrapper will decide whether to use it or the human's action.
             obs, reward, terminated, truncated, info = env.step(random_policy_action)
@@ -63,7 +62,7 @@ def main():
                 time.sleep(1)
                 obs, info = env.reset()
 
-            time.sleep(0.02)
+            time.sleep(0.01)
 
     except (IOError, pygame.error) as e:
         print(f"\nError: {e}")
