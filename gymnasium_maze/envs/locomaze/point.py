@@ -65,7 +65,7 @@ class PointEnv(MujocoEnv, utils.EzPickle):
         prev_qpos = self.data.qpos.copy()
         prev_qvel = self.data.qvel.copy()
 
-        action = 0.2 * action
+        action = 0.1 * action
 
         self.data.qpos[:] = self.data.qpos + action
         self.data.qvel[:] = np.array([0.0, 0.0])
