@@ -211,14 +211,17 @@ class Maze:
                 elif struct == DANGER: # Ideally use the DANGEROUS constant
                     maze._dangerous_locations.append(np.array([x, y]))
                     # Add a visual marker for the dangerous zone
+                    disk_radius      = 0.2 * maze_size_scaling
+                    disk_half_height = 0.005 * maze_size_scaling      # sehr flach
+
                     ET.SubElement(
                         worldbody,
                         "site",
                         name=f"dangerous_{i}_{j}",
-                        pos=f"{x} {y} {maze_height / 2 * maze_size_scaling}",
-                        size=f"{0.15 * maze_size_scaling}", # smaller than target
-                        rgba="1 1 0 0.5", # yellow, semi-transparent
-                        type="sphere",
+                        pos=f"{x} {y} {0.05 + disk_half_height}",
+                        size=f"{disk_radius} {disk_half_height}",      # radius, halbe Höhe
+                        rgba="1 1 0 0.2",                              # 0.2 = deutlich transparenter
+                        type="cylinder",
                     )
                 elif struct == 0:
                     empty_locations.append(np.array([x, y]))
